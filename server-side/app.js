@@ -1,10 +1,11 @@
 var createError = require('http-errors');
 var express = require('express');
-const mysql = require('mysql');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const db = require('./database/db');
+const options = require('./knexfile.js');
+const knex = require('knex')(options);
 
 const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = require('./docs/swagger.json');
@@ -26,6 +27,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(db);
+app.use((req, res, next) => {
+  req.db = knex
+  next();
+})
 
 app.use('/', helpersRouter);
 app.use('/users', usersRouter);
