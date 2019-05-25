@@ -1,0 +1,45 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "CrimeWatch!",
+        "description": "This is an Express API based on the Queensland crime data.",
+        "version": "1.0.0",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "N10205144@qut.edu.au"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "servers": [{
+        "url": "http://localhost:3000"
+    }],
+    "tags": [{
+        "name": "authentication",
+        "description": "Login and Registration to the API (to be implemented)." 
+    }, {
+        "name": "search",
+        "description": "Authenticated endpoint for specific crime data (to be implemented)."
+    }, {
+        "name": "helpers",
+        "description": "Non-autheticated endpoints for categorical data (to be implemented)."
+    }],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": ["helpers"],
+                "summary": "Simple information page",
+                "description": "Very basic API home page promising more information",
+                "operationId": "apiHome",
+                "produces": ["text/html"],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const db = require('./database/db');
 
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocument = require('./docs/swagger.json');
+
 var helpersRouter = require('./routes/helpers');
 var usersRouter = require('./routes/users');
 var searchRouter = require('./routes/search');
@@ -28,6 +31,7 @@ app.use('/', helpersRouter);
 app.use('/users', usersRouter);
 app.use('/', searchRouter);
 app.use('/', authenticationRouter);
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
