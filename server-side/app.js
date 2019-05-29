@@ -6,6 +6,8 @@ var logger = require('morgan');
 const db = require('./database/db');
 const options = require('./knexfile.js');
 const knex = require('knex')(options);
+const helmet = require('helmet');
+const cors = require('cors');
 
 const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = require('./docs/swagger.json');
@@ -21,7 +23,9 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+app.use(logger('common'));
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

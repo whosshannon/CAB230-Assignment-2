@@ -18,7 +18,7 @@
     }],
     "tags": [{
         "name": "Authentication",
-        "description": "(to be implemented)." 
+        "description": "(to be implemented)."
     }, {
         "name": "Search",
         "description": "(to be implemented)."
@@ -30,16 +30,59 @@
         "/register": {
             "get": {
                 "tags": ["Authentication"],
-                "summary":"Registers a new user account",
+                "summary": "Registers a new user account",
                 "description": "This is your starting point.",
                 "operationId": "register",
                 "produces": ["application/json"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "demo-user@gmail.com"
+                                    },
+                                    "password": {
+                                        "example": "demopassword"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
-                        "description": "Created"
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "message": "yay! you've successfully registered your user account :)"
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "400":{
-                        "description": "Bad request"
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "message": "oops! It looks like that user already exists :("
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -47,15 +90,60 @@
         "/login": {
             "get": {
                 "tags": ["Authentication"],
-                "summary":"Login with an existing user account",
+                "summary": "Login with an existing user account",
                 "operationId": "login",
                 "produces": ["application/json"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "demo-user@gmail.com"
+                                    },
+                                    "password": {
+                                        "example": "demopassword"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1Nzg2LCJlbWFpbCI6ImRlbW8xMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE1NTUzMjQ2MDIsImV4cCI6MTU1NTQxMTAwMn0.mo85iKuAQ_h8n8-6pkeNNs5CCnV0G8hScxhi_ml_Q6c",
+                                        "token_type": "Bearer",
+                                        "expires_in": 86400
+                                    }
+                                }
+                            }
+                        }
                     },
                     "401": {
-                        "description":"Unauthorised"
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "message": "invalid login - bad password"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -66,15 +154,104 @@
                 "description": "Seach for Offence data",
                 "operationId": "search",
                 "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "offence",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Name of the Offence to search for"
+                    },
+                    {
+                        "in": "query",
+                        "name": "area",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "List of comma-separated Areas (LGAs) to filter search results by"
+                    },
+                    {
+                        "in": "query",
+                        "name": "age",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "List of comma-separated Ages to filter search results by"
+                    },
+                    {
+                        "in": "query",
+                        "name": "gender",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "List of comma-separated Genders to filter search results by"
+                    },
+                    {
+                        "in": "query",
+                        "name": "year",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "List of comma-separated Years to filter search results by"
+                    },
+                    {
+                        "in": "query",
+                        "name": "month",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "List of comma-separated Months to filter search results by (1-12)"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "query": {
+                                            "offence": "Homicide (Murder)"
+                                        },
+                                        "result": [{
+                                            "LGA": "Aurukun Shire Council",
+                                            "total": 4,
+                                            "lat": -27.470812,
+                                            "lng": 153.022455
+                                        }]
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request"
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "message": "oops! it looks like you're missing the offence query parm"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthorised"
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "message": "oh no! it looks like your authorization token is invalid..."
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -82,14 +259,24 @@
         "/offences": {
             "get": {
                 "tags": ["Helpers"],
-                "description":"List of offences to perform searches for",
-                "operationId:":"getOffences",
-                "produces":["application/json"],
+                "description": "List of offences to perform searches for",
+                "operationId:": "getOffences",
+                "produces": ["application/json"],
                 "responses": {
                     "200": {
-                        "description":"OK",
-                        "schema": {
-                            "type": "object"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "offences": [
+                                          "Advertising Prostitution",
+                                          "Armed Robbery"
+                                        ]
+                                      }
+                                }
+                            }
                         }
                     }
                 }
@@ -103,7 +290,20 @@
                 "produces": ["application/json"],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "offences": [
+                                          "Aurukun Shire Council",
+                                          "Balonne Shire Council"
+                                        ]
+                                      }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -116,7 +316,20 @@
                 "produces": ["application/json"],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "offences": [
+                                          "Adult",
+                                          "Juvenile"
+                                        ]
+                                      }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -129,7 +342,20 @@
                 "produces": ["application/json"],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "offences": [
+                                          "Female",
+                                          "Male"
+                                        ]
+                                      }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -142,7 +368,20 @@
                 "produces": ["application/json"],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "json",
+                                    "example": {
+                                        "offences": [
+                                          2001,
+                                          2002
+                                        ]
+                                      }
+                                }
+                            }
+                        }
                     }
                 }
             }

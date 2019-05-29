@@ -4,7 +4,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'My own self induced suffering' });
+  res.render('index', { title: ':((((((' });
 });
 
 router.get("/offences", function (req, res, next) { //FIXME: format correctly; currently as 'pretty':'offence' when i think it should all be one big lump of json
