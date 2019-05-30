@@ -1,5 +1,5 @@
 var express = require('express');
-const mysql = require('mysql');
+//const mysql = require('mysql');
 var router = express.Router();
 
 /* GET home page. */
@@ -7,13 +7,13 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: ':((((((' });
 });
 
-router.get("/offences", function (req, res, next) { //FIXME: format correctly; currently as 'pretty':'offence' when i think it should all be one big lump of json
-  req.db.from('offence_columns').select('pretty')
+router.get("/offences", function (req, res, next) {
+  req.db.from('offence_columns').select('pretty').map((row) => {
+    return row.pretty;
+  })
     .then((rows) => {
       res.json({
-        "Error": false,
-        "Message": "Success",
-        "Offences": rows
+        "offences": rows
       })
     })
     .catch((err) => {
@@ -25,12 +25,12 @@ router.get("/offences", function (req, res, next) { //FIXME: format correctly; c
     })
 });
 
-router.get("/areas", function (req, res, next) { //FIXME: same as offences
-  req.db.from('areas').select('area')
+router.get("/areas", function (req, res, next) {
+  req.db.from('areas').select('area').map((row) => {
+    return row.area;
+  })
     .then((rows) => {
       res.json({
-        "Error": false,
-        "Message": "Success",
         "Areas": rows
       })
     })
@@ -43,58 +43,58 @@ router.get("/areas", function (req, res, next) { //FIXME: same as offences
     })
 });
 
-router.get("/ages", function (req, res, next) { //FIXME: same as offence
-  req.db.from('offences').select('age').distinct()
-  .then((rows) => {
-    res.json({
-      "Error": false,
-      "Message": "Success",
-      "Ages": rows
-    })
+router.get("/ages", function (req, res, next) { 
+  req.db.from('offences').select('age').distinct().map((row) => {
+    return row.age;
   })
-  .catch((err) => {
-    console.log(err);
-    res.json({
-      "Error": true,
-      "Message": "Error in MySQL query"
+    .then((rows) => {
+      res.json({
+        "Ages": rows
+      })
     })
-  })
+    .catch((err) => {
+      console.log(err);
+      res.json({
+        "Error": true,
+        "Message": "Error in MySQL query"
+      })
+    })
 });
 
-router.get("/genders", function (req, res, next) { //FIXME: same as offence
-  req.db.from('offences').select('gender').distinct()
-  .then((rows) => {
-    res.json({
-      "Error": false,
-      "Message": "Success",
-      "Ages": rows
-    })
+router.get("/genders", function (req, res, next) { 
+  req.db.from('offences').select('gender').distinct().map((row) => {
+    return row.gender;
   })
-  .catch((err) => {
-    console.log(err);
-    res.json({
-      "Error": true,
-      "Message": "Error in MySQL query"
+    .then((rows) => {
+      res.json({
+        "Genders": rows
+      })
     })
-  })
+    .catch((err) => {
+      console.log(err);
+      res.json({
+        "Error": true,
+        "Message": "Error in MySQL query"
+      })
+    })
 });
 
-router.get("/years", function (req, res, next) { //FIXME: same as offence
-  req.db.from('offences').select('year').distinct()
-  .then((rows) => {
-    res.json({
-      "Error": false,
-      "Message": "Success",
-      "Ages": rows
-    })
+router.get("/years", function (req, res, next) { 
+  req.db.from('offences').select('year').distinct().map((row) => {
+    return row.year;
   })
-  .catch((err) => {
-    console.log(err);
-    res.json({
-      "Error": true,
-      "Message": "Error in MySQL query"
+    .then((rows) => {
+      res.json({
+        "Years": rows
+      })
     })
-  })
+    .catch((err) => {
+      console.log(err);
+      res.json({
+        "Error": true,
+        "Message": "Error in MySQL query"
+      })
+    })
 });
 
 
