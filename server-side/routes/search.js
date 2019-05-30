@@ -11,9 +11,9 @@ router.get("/search/offence=:offence?(&area=:area)?(&age=:age)?(&gender=:gender)
     let month = decodeURIComponent(req.params.month).split(",");
 
     let query = req.db.from("offences").innerJoin('areas', 'offences.area', 'areas.area')
-    query.select(req.db.raw('offences.area, areas.lat, areas.lng, sum(??)', [offence]))
+    query.select(req.db.raw('offences.area, areas.lat, areas.lng, sum(??) as total', [offence]))
 
-    if (area !== "undefined") {
+    if (area[0] !== "undefined") {
         query.whereIn("offences.area", area)
     }
     if (age[0] != "undefined") {
@@ -29,13 +29,24 @@ router.get("/search/offence=:offence?(&area=:area)?(&age=:age)?(&gender=:gender)
         query.whereIn("offences.month", month)
     }
 
-    query.groupBy(['offences.area', 'areas.lat', 'areas.lng'])
+    query.groupBy(['offences.area', 'areas.lat', 'areas.lng']).map((row) => {
+        return {
+            area: row.area,
+            total: row.total,
+            lat: row.lat,
+            lng: row.lng
+        }
+    })
+    
     query.then((rows) => {
         res.json({
             "query": {
                 offence: offence,
                 area: area,
-                age: age
+                age: age,
+                gender: gender,
+                year: year,
+                month: month
             },
             "result": rows
         })
@@ -58,9 +69,9 @@ router.get("/search/test/offence=:offence?(&area=:area)?(&age=:age)?(&gender=:ge
     let month = decodeURIComponent(req.params.month).split(",");
 
     let query = req.db.from("offences").innerJoin('areas', 'offences.area', 'areas.area')
-    query.select(req.db.raw('offences.area, areas.lat, areas.lng, sum(??)', [offence]))
+    query.select(req.db.raw('offences.area, areas.lat, areas.lng, sum(??) as total', [offence]))
 
-    if (area !== "undefined") {
+    if (area[0] !== "undefined") {
         query.whereIn("offences.area", area)
     }
     if (age[0] != "undefined") {
@@ -76,13 +87,24 @@ router.get("/search/test/offence=:offence?(&area=:area)?(&age=:age)?(&gender=:ge
         query.whereIn("offences.month", month)
     }
 
-    query.groupBy(['offences.area', 'areas.lat', 'areas.lng'])
+    query.groupBy(['offences.area', 'areas.lat', 'areas.lng']).map((row) => {
+        return {
+            area: row.area,
+            total: row.total,
+            lat: row.lat,
+            lng: row.lng
+        }
+    })
+    
     query.then((rows) => {
         res.json({
             "query": {
                 offence: offence,
                 area: area,
-                age: age
+                age: age,
+                gender: gender,
+                year: year,
+                month: month
             },
             "result": rows
         })
