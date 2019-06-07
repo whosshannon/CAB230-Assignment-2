@@ -3,7 +3,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const db = require('./database/db');
 const options = require('./knexfile.js');
 const knex = require('knex')(options);
 const helmet = require('helmet');
@@ -13,7 +12,6 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = require('./docs/swagger.json');
 
 var helpersRouter = require('./routes/helpers');
-var usersRouter = require('./routes/users');
 var searchRouter = require('./routes/search');
 var authenticationRouter = require('./routes/authentication');
 
@@ -30,17 +28,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(db);
 app.use((req, res, next) => {
   req.db = knex
   next();
 })
 
 app.use('/', helpersRouter);
-app.use('/users', usersRouter);
 app.use('/', searchRouter);
 app.use('/', authenticationRouter);
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

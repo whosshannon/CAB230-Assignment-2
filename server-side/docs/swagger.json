@@ -3,28 +3,20 @@
     "info": {
         "title": "CAB230: Web Computing API",
         "description": "An Express API by Shannon Stephens, N10205144",
-        "version": "1.0.0",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "email": "N10205144@qut.edu.au"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+        "version": "1.0.0"
     },
     "servers": [{
         "url": "http://localhost:3000"
     }],
     "tags": [{
         "name": "Authentication",
-        "description": "(to be implemented)."
+        "description": "(not implemented)."
     }, {
         "name": "Search",
-        "description": "(to be implemented)."
+        "description": ""
     }, {
         "name": "Helpers",
-        "description": "(to be implemented)."
+        "description": ""
     }],
     "paths": {
         "/register": {

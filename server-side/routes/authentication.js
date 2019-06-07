@@ -8,7 +8,7 @@ router.get("/register", function (req, res, next) {
 
 router.post("/login", function (req, res) {
     if (!req.body.email || !req.body.password) {
-        res.status(400).json({message: `Error whoops`});
+        res.status(400).json({message: `Error`});
         console.log(`Error on request body`, JSON.stringify(req.body));
     } else {
         const filter = {
@@ -26,6 +26,7 @@ router.post("/login", function (req, res) {
             res.status(500).json({message: 'Database error - not updated'});
         })
     }
+    res.render('index', { title: 'login' });
 });
 
 

@@ -2,11 +2,6 @@ var express = require('express');
 //const mysql = require('mysql');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: ':((((((' });
-});
-
 router.get("/offences", function (req, res, next) {
   req.db.from('offence_columns').select('pretty').map((row) => {
     return row.pretty;
